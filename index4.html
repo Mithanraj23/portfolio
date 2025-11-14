@@ -1,0 +1,1543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mithan's Folio - Creative Developer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        /* Custom styles for the dark theme and neon glow effects */
+        :root {
+            --dark-bg: #111425; /* Slightly lighter dark for better contrast */
+            --mid-dark-bg: #1e213a;
+            --neon-blue: #00bfff;
+            --neon-purple: #8a2be2;
+            --accent-blue: #3b82f6;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--dark-bg);
+            color: #e0e0e0;
+            scroll-behavior: smooth;
+        }
+
+        /* Gradient Text (used for section headers) */
+        .gradient-text {
+            background-image: linear-gradient(90deg, #3b82f6, #00bfff, #8a2be2);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
+            animation: gradient-shift 3s ease infinite;
+        }
+
+        @keyframes gradient-shift {
+            0%, 100% { background-position: 0% center; }
+            50% { background-position: 100% center; }
+        }
+
+        /* Nav Link Active/Hover Style (Matching Titan Folio image) */
+        .nav-link {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 8px 16px;
+            border-radius: 9999px;
+            color: #ccc;
+            position: relative;
+            overflow: hidden;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent-blue), var(--neon-purple));
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateX(-50%);
+        }
+        .nav-link:hover, .nav-link.active {
+            color: white;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(138, 43, 226, 0.15));
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.5), inset 0 0 10px rgba(138, 43, 226, 0.2);
+            transform: translateY(-2px);
+        }
+        .nav-link:hover::after, .nav-link.active::after {
+            width: 80%;
+        }
+        /* Nav link active animation glow */
+        .nav-link.active::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.4) 0%, rgba(138, 43, 226, 0.2) 50%, rgba(59, 130, 246, 0) 70%);
+            transform: rotate(0deg);
+            animation: rotateGlow 3s linear infinite;
+            opacity: 0.5;
+            z-index: -1;
+        }
+
+        @keyframes rotateGlow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Glassmorphism Effect for Cards (Slightly adjusted for new theme) */
+        .glass-card {
+            background: linear-gradient(135deg, rgba(30, 33, 58, 0.8), rgba(30, 33, 58, 0.6));
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6);
+            transition: all 0.3s ease;
+        }
+        .glass-card:hover {
+            border-color: rgba(59, 130, 246, 0.4);
+            box-shadow: 0 12px 40px rgba(59, 130, 246, 0.2), 0 8px 20px rgba(138, 43, 226, 0.15);
+            transform: translateY(-4px);
+        }
+
+        /* Parallax Container Setup */
+        .parallax-container {
+            position: relative;
+            height: 100vh;
+            overflow: hidden;
+            perspective: 1px;
+            transform-style: preserve-3d;
+        }
+        .parallax-layer {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            pointer-events: none;
+            will-change: transform;
+        }
+        
+        .layer-bg {
+            background: radial-gradient(ellipse at center, rgba(59, 130, 246, 0.05) 0%, transparent 50%);
+            z-index: 10;
+        }
+        .layer-mid {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25' viewBox='0 0 100 100'%3E%3Cdefs%3E%3Cpattern id='p' width='10' height='10' patternUnits='userSpaceOnUse'%3E%3Cpath d='M-1,1 l2,-2 M0,10 l10,-10 M9,11 l2,-2' stroke='%233B3E59' stroke-width='0.5' /%3E%3C/pattern%3E%3C/defs%3E%3Crect width='100' height='100' fill='url(%23p)' /%3E%3C/svg%3E");
+            background-size: 500px 500px;
+            opacity: 0.3;
+            z-index: 20;
+            animation: pattern-drift 40s linear infinite;
+        }
+
+        @keyframes pattern-drift {
+            0% { background-position: 0 0; }
+            100% { background-position: 500px 500px; }
+        }
+
+        /* Scroll Reveal Animation Classes */
+        .scroll-hidden {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .scroll-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Radial Skills Diagram */
+        .skill-ring-container {
+            position: relative;
+            width: 400px;
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+        }
+        .skill-center {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #00bfff, #8a2be2, #3b82f6);
+            background-size: 200% 200%;
+            animation: gradient-rotate 3s ease infinite;
+            box-shadow: 0 0 20px rgba(0, 191, 255, 0.5), 0 0 40px rgba(138, 43, 226, 0.3), 0 0 60px rgba(59, 130, 246, 0.2);
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .skill-center:hover {
+            transform: translate(-50%, -50%) scale(1.1) rotate(5deg);
+            box-shadow: 0 0 30px rgba(0, 191, 255, 0.7), 0 0 60px rgba(138, 43, 226, 0.5), 0 0 90px rgba(59, 130, 246, 0.3);
+        }
+
+        @keyframes gradient-rotate {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        .skill-icon {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.5s;
+            pointer-events: auto;
+            cursor: pointer;
+            opacity: 0;
+            transform: scale(0.1);
+        }
+        .skill-icon.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+        .skill-icon:hover {
+            transform: scale(1.15);
+            box-shadow: 0 0 30px rgba(59, 130, 246, 0.6);
+        }
+        .skill-icon i {
+            color: var(--neon-blue);
+            transition: color 0.3s ease;
+        }
+
+        /* Tech Stack Icons container (NEW DYNAMIC STACK) */
+        .tech-stack-container {
+            transition: max-height 0.5s ease-in-out, opacity 0.4s ease-in-out;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            padding-top: 0;
+            display: flex; /* Ensure it's a flex container for icons */
+            flex-wrap: wrap; /* Allow icons to wrap */
+            justify-content: flex-start; /* Align icons to the start */
+            gap: 1rem; /* Space between icons */
+        }
+        .tech-stack-container.expanded {
+            max-height: 500px; /* Adjusted to allow more height for icons */
+            opacity: 1;
+            padding-top: 1rem;
+        }
+        .tech-icon-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 8px;
+            transition: transform 0.2s;
+            width: 80px; /* Fixed width for icon items */
+            text-align: center;
+        }
+        .tech-icon-item:hover {
+            transform: translateY(-3px);
+        }
+
+        /* Scroll to Top Button (NEW) */
+        #scrollToTopBtn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, var(--accent-blue), var(--neon-purple));
+            background-size: 200% 200%;
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: none; /* Hidden by default */
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(59, 130, 246, 0.4), 0 0 30px rgba(138, 43, 226, 0.3);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 100;
+            animation: gradient-shift 3s ease infinite;
+        }
+        #scrollToTopBtn:hover {
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 8px 30px rgba(59, 130, 246, 0.6), 0 0 50px rgba(138, 43, 226, 0.5);
+            animation: gradient-shift 1s ease infinite;
+        }
+        #scrollToTopBtn:active {
+            transform: translateY(-3px) scale(1.05);
+        }
+
+        /* Let's Talk button custom hover */
+        .btn-talk {
+            background: transparent;
+            border: 2px solid rgba(255,255,255,0.15);
+            color: #ffffff;
+            padding: 0.75rem 2rem;
+            border-radius: 9999px;
+            font-weight: 700;
+            position: relative;
+            overflow: hidden;
+            transition: transform 220ms ease, box-shadow 220ms ease, color 220ms ease;
+        }
+        .btn-talk::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
+            transition: left 350ms ease;
+            z-index: -1;
+        }
+        .btn-talk:hover::before {
+            left: 0;
+        }
+        .btn-talk:hover {
+            color: #ffffff;
+            box-shadow: 0 10px 35px rgba(58,123,255,0.3), 0 5px 15px rgba(138,43,226,0.2);
+            transform: translateY(-3px) scale(1.05);
+            border-color: transparent;
+        }
+
+        /* "What I Love" / Interests section styles */
+        #interests { 
+            padding: 4.5rem 0;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #312e81 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        #interests::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 50%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 50%, rgba(59, 130, 246, 0.15) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        .interests-grid {
+            display: grid;
+            grid-template-columns: repeat(1, minmax(0, 1fr));
+            gap: 1.25rem;
+            position: relative;
+            z-index: 1;
+        }
+        @media (min-width: 768px) {
+            .interests-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        }
+        @media (min-width: 1024px) {
+            .interests-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+        }
+        .interest-card {
+            background: linear-gradient(135deg, rgba(30,33,58,0.9), rgba(30,33,58,0.7));
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            padding: 1.75rem;
+            border-radius: 1rem;
+            transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            min-height: 320px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+        .interest-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.2), transparent);
+            transition: left 600ms ease;
+        }
+        .interest-card:hover::before {
+            left: 100%;
+        }
+        .interest-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 50px rgba(139, 92, 246, 0.3), 0 10px 25px rgba(59, 130, 246, 0.2);
+            border-color: rgba(139, 92, 246, 0.5);
+            background: linear-gradient(135deg, rgba(30,33,58,0.95), rgba(30,33,58,0.8));
+        }
+        .interest-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 9999px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.3), rgba(59, 130, 246, 0.3));
+            color: #a78bfa;
+            font-size: 1.6rem;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+            transition: all 300ms ease;
+        }
+        .interest-card:hover .interest-icon {
+            transform: scale(1.15) rotate(8deg);
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.6), 0 4px 12px rgba(59, 130, 246, 0.4);
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.4), rgba(59, 130, 246, 0.4));
+        }
+        .interest-card h3 { 
+            font-size: 1.15rem; 
+            font-weight: 700;
+            color: white;
+        }
+        .interest-card p { 
+            color: #c8c8d2; 
+            font-size: 0.95rem; 
+            line-height: 1.5;
+        }
+
+        /* Vercel icon - white triangle only */
+        .tech-icon-item .fa-vercel {
+            background: transparent !important;
+            color: white;
+            font-style: normal;
+        }
+        .tech-icon-item .fa-vercel::before {
+            content: '▲';
+            font-size: 2rem;
+        }
+
+        /* Specific color for MongoDB icon */
+        .tech-icon-item .fa-leaf {
+            color: #47A248; /* MongoDB green */
+        }
+
+        /* Blob animation */
+        @keyframes blob {
+            0% { transform: translate(0px, 0px) scale(1); }
+            33% { transform: translate(20px, -10px) scale(1.05); }
+            66% { transform: translate(-15px, 10px) scale(0.95); }
+            100% { transform: translate(0px, 0px) scale(1); }
+        }
+        .animate-blob {
+            animation: blob 8s infinite ease-in-out;
+        }
+
+        /* Spin animations */
+        @keyframes spinSlow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .animate-spin-slow {
+            animation: spinSlow 18s linear infinite;
+        }
+        .animate-reverse-spin {
+            animation: spinSlow 22s linear infinite reverse;
+        }
+
+        /* Floating animation */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) translateX(0px); opacity: 0.7; }
+            25% { transform: translateY(-20px) translateX(10px); opacity: 1; }
+            50% { transform: translateY(-10px) translateX(-10px); opacity: 0.7; }
+            75% { transform: translateY(-25px) translateX(5px); opacity: 1; }
+        }
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        /* Pulse glow animation */
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 0.5; box-shadow: 0 0 20px rgba(0, 191, 255, 0.3); }
+            50% { opacity: 1; box-shadow: 0 0 40px rgba(0, 191, 255, 0.6); }
+        }
+        .animate-pulse-glow {
+            animation: pulse-glow 3s ease-in-out infinite;
+        }
+
+        /* Gradient shift animation */
+        @keyframes gradient-shift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        /* Scroll animations for all sections */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        .animate-fade-in-left {
+            animation: fadeInLeft 0.8s ease-out forwards;
+        }
+
+        .animate-fade-in-right {
+            animation: fadeInRight 0.8s ease-out forwards;
+        }
+
+        /* Background animation for entire page */
+        @keyframes gradientBackground {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, 
+                rgba(17, 20, 37, 1) 0%, 
+                rgba(30, 33, 58, 0.95) 25%,
+                rgba(59, 130, 246, 0.05) 50%,
+                rgba(138, 43, 226, 0.05) 75%,
+                rgba(17, 20, 37, 1) 100%);
+            background-size: 400% 400%;
+            animation: gradientBackground 15s ease infinite;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Particle background effect */
+        @keyframes particleFloat {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); opacity: 0.3; }
+            33% { transform: translate(30px, -30px) rotate(120deg); opacity: 0.6; }
+            66% { transform: translate(-20px, 20px) rotate(240deg); opacity: 0.3; }
+        }
+
+        .particle {
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Code animation styles */
+        .code-line {
+            opacity: 0;
+            animation: fadeInCode 0.5s ease-out forwards;
+        }
+        .code-line:nth-child(1) { animation-delay: 0.1s; }
+        .code-line:nth-child(2) { animation-delay: 0.2s; }
+        .code-line:nth-child(3) { animation-delay: 0.3s; }
+        .code-line:nth-child(4) { animation-delay: 0.4s; }
+        .code-line:nth-child(5) { animation-delay: 0.5s; }
+        .code-line:nth-child(6) { animation-delay: 0.6s; }
+        .code-line:nth-child(7) { animation-delay: 0.7s; }
+        .code-line:nth-child(8) { animation-delay: 0.8s; }
+        .code-line:nth-child(9) { animation-delay: 0.9s; }
+        .code-line:nth-child(10) { animation-delay: 1.0s; }
+        .code-line:nth-child(11) { animation-delay: 1.1s; }
+        .code-line:nth-child(12) { animation-delay: 1.2s; }
+        .code-line:nth-child(13) { animation-delay: 1.3s; }
+        .code-line:nth-child(14) { animation-delay: 1.4s; }
+        .code-line:nth-child(15) { animation-delay: 1.5s; }
+        .code-line:nth-child(16) { animation-delay: 1.6s; }
+        .code-line:nth-child(17) { animation-delay: 1.7s; }
+
+        @keyframes fadeInCode {
+            from {
+                opacity: 0;
+                transform: translateX(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .cursor-blink {
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+
+        /* Hero content scroll animation */
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .hero-content-animate h1 {
+            animation: slideInLeft 1s ease-out forwards;
+        }
+
+        .hero-content-animate p:nth-of-type(1) {
+            animation: slideInLeft 1s ease-out 0.2s forwards;
+            opacity: 0;
+        }
+
+        .hero-content-animate p:nth-of-type(2) {
+            animation: slideInLeft 1s ease-out 0.4s forwards;
+            opacity: 0;
+        }
+
+        .hero-content-animate .flex.flex-wrap {
+            animation: slideInLeft 1s ease-out 0.6s forwards;
+            opacity: 0;
+        }
+
+        .hero-content-animate .social-links {
+            animation: slideInLeft 1s ease-out 0.8s forwards;
+            opacity: 0;
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen">
+    
+    <header class="fixed top-0 left-0 right-0 z-50 p-4 backdrop-blur-md bg-dark-bg/90 border-b border-gray-700/50 transition-all duration-500 shadow-lg shadow-black/20" id="main-header">
+        <nav class="container mx-auto flex justify-between items-center max-w-7xl">
+            <div class="text-2xl font-extrabold text-white flex items-center">
+                <i class="fas fa-cube text-xl mr-2 text-accent-blue"></i>
+                Mithan <span class="gradient-text ml-1">Folio</span>
+            </div>
+            <div class="flex space-x-2 md:space-x-4 text-sm font-medium">
+                <a href="#hero" class="nav-link active">Home</a>
+                <a href="#about" class="nav-link">About</a>
+                <a href="#skills" class="nav-link">Skills</a>
+                <a href="#portfolio" class="nav-link">Portfolio</a>
+                <a href="#contact" class="nav-link">Contact</a>
+            </div>
+        </nav>
+    </header>
+
+    <section id="hero" class="parallax-container h-[120vh]">
+        <div id="layer-bg" data-speed="0.05" class="parallax-layer layer-bg"></div>
+        <div id="layer-mid" data-speed="0.15" class="parallax-layer layer-mid"></div>
+
+        <div class="layer-fg z-40 p-4 pt-20 flex items-center justify-center h-full">
+            <div class="container mx-auto px-6 max-w-7xl">
+                <div class="flex flex-col lg:flex-row items-center gap-12">
+                    <!-- Left: Content -->
+                    <div class="lg:w-1/2 text-left space-y-6 hero-content-animate">
+                        <h1 class="text-5xl md:text-6xl lg:text-7xl font-black tracking-tight">
+                            I'M <span class="gradient-text">MITHAN</span>
+                        </h1>
+                        <!-- <p class="text-xl md:text-2xl text-gray-300 font-semibold">
+                            Web & Full-Stack Developer
+                        </p> -->
+                        <p class=" text-gray-400 mb-16 text-lg">
+                                <span style="color: var(--neon-blue);">WEB</span> & <span style="color: var(--neon-purple);">FULL-STACK</span> DEVELOPER
+                        </p>
+
+                        <p class="text-gray-400 text-lg leading-relaxed max-w-lg">
+                            I'm passionate about crafting beautiful, responsive web applications with cutting-edge technology. 
+                            With expertise in both frontend and backend development, I transform ideas into scalable, user-centric digital experiences.
+                        </p>
+
+                        <div class="flex flex-wrap gap-4 mt-8">
+                            <a href="#portfolio" class="px-8 py-3 bg-accent-blue text-white rounded-full font-semibold hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300 transform hover:-translate-y-1">
+                                View My Works
+                            </a>
+                            <a href="#contact" class="btn-talk">
+                                Let's Talk
+                            </a>
+                        </div>
+
+                        <div class="social-links flex gap-6 mt-8">
+                            <a href="https://www.facebook.com/share/1DANjki2gL/" target="_blank" class="text-2xl text-gray-400 hover:text-blue-600 transition-colors duration-300"><i class="fab fa-facebook"></i></a>
+                            <a href="https://github.com/Mithanraj23" target="_blank" class="text-2xl text-gray-400 hover:text-white transition-colors duration-300"><i class="fab fa-github"></i></a>
+                            <a href="https://linkedin.com/in/mithanraj" target="_blank" class="text-2xl text-gray-400 hover:text-blue-500 transition-colors duration-300"><i class="fab fa-linkedin"></i></a>
+                            <a href="https://www.instagram.com/itz_mithan_23/" target="_blank" class="text-2xl text-gray-400 hover:text-pink-500 transition-colors duration-300"><i class="fab fa-instagram"></i></a>
+                        </div>
+                    </div>
+
+                    <!-- Right: Frontend Code Animation -->
+                    <div class="lg:w-1/2 flex items-center justify-center relative">
+                        <div class="relative w-96 h-96">
+                            <!-- Code editor simulation -->
+                            <div class="absolute inset-0 bg-gray-900/80 rounded-2xl border-2 border-blue-500/30 overflow-hidden shadow-2xl">
+                                <!-- Editor header -->
+                                <div class="bg-gray-800 px-4 py-2 flex items-center gap-2 border-b border-gray-700">
+                                    <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                                    <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                                    <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                                    <span class="ml-4 text-gray-400 text-sm">index.jsx</span>
+                                </div>
+                                
+                                <!-- Code content -->
+                                <div class="p-4 font-mono text-sm leading-relaxed">
+                                    <div class="code-line"><span class="text-purple-400">import</span> <span class="text-blue-300">React</span> <span class="text-purple-400">from</span> <span class="text-green-400">'react'</span></div>
+                                    <div class="code-line"><span class="text-purple-400">import</span> <span class="text-blue-300">{ useState }</span> <span class="text-purple-400">from</span> <span class="text-green-400">'react'</span></div>
+                                    <div class="code-line mt-2"></div>
+                                    <div class="code-line"><span class="text-purple-400">const</span> <span class="text-yellow-300">Portfolio</span> = () <span class="text-purple-400">=></span> {</div>
+                                    <div class="code-line ml-4"><span class="text-purple-400">const</span> [<span class="text-blue-300">skills</span>] = <span class="text-yellow-300">useState</span>([</div>
+                                    <div class="code-line ml-8"><span class="text-green-400">'React'</span>,</div>
+                                    <div class="code-line ml-8"><span class="text-green-400">'Node.js'</span>,</div>
+                                    <div class="code-line ml-8"><span class="text-green-400">'MongoDB'</span>,</div>
+                                    <div class="code-line ml-4">])</div>
+                                    <div class="code-line mt-2"></div>
+                                    <div class="code-line ml-4"><span class="text-purple-400">return</span> (</div>
+                                    <div class="code-line ml-8"><span class="text-gray-500">&lt;</span><span class="text-blue-400">div</span> <span class="text-cyan-300">className</span>=<span class="text-green-400">"portfolio"</span><span class="text-gray-500">&gt;</span></div>
+                                    <div class="code-line ml-12"><span class="text-gray-500">&lt;</span><span class="text-blue-400">h1</span><span class="text-gray-500">&gt;</span><span class="text-white">Creative Dev</span><span class="cursor-blink">|</span></div>
+                                    <div class="code-line ml-8"><span class="text-gray-500">&lt;/</span><span class="text-blue-400">div</span><span class="text-gray-500">&gt;</span></div>
+                                    <div class="code-line ml-4">)</div>
+                                    <div class="code-line">}</div>
+                                </div>
+                            </div>
+
+                            <!-- Floating HTML tags -->
+                            <div class="absolute -top-8 -right-8 text-4xl text-blue-500/40 animate-float" style="animation-delay: 0s;">&lt;/&gt;</div>
+                            <div class="absolute -bottom-8 -left-8 text-3xl text-purple-500/40 animate-float" style="animation-delay: 1s;">{ }</div>
+                            <div class="absolute top-1/4 -left-12 text-2xl text-cyan-500/40 animate-float" style="animation-delay: 2s;">&lt;div&gt;</div>
+                            <div class="absolute bottom-1/4 -right-12 text-2xl text-pink-500/40 animate-float" style="animation-delay: 1.5s;">( )</div>
+
+                            <!-- Glowing particles -->
+                            <div class="absolute top-10 right-10 w-2 h-2 rounded-full bg-blue-500 animate-pulse"></div>
+                            <div class="absolute bottom-20 left-10 w-1.5 h-1.5 rounded-full bg-purple-500 animate-pulse" style="animation-delay: 0.5s;"></div>
+                            <div class="absolute top-1/2 right-5 w-1 h-1 rounded-full bg-cyan-500 animate-pulse" style="animation-delay: 1s;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="py-24 md:py-32 bg-gradient-to-b from-transparent to-mid-dark-bg min-h-screen scroll-hidden">
+        <div class="container mx-auto max-w-7xl px-6">
+            <h2 class="text-5xl md:text-6xl font-black uppercase text-center mb-4 tracking-wider text-white">
+                ABOUT <span class="gradient-text">ME</span>
+            </h2>
+            <p class="text-center text-gray-400 mb-16 text-lg">
+                <span style="color: var(--neon-blue);">WEB</span> & <span style="color: var(--neon-purple);">FULL-STACK</span> DEVELOPER
+            </p>
+
+            <div class="flex flex-col lg:flex-row justify-between items-start gap-12">
+                
+                <div class="lg:w-1/2 space-y-8">
+                    <p class="text-xl text-gray-300 border-l-4 border-accent-blue pl-4 italic">
+                        I am a dedicated Web and Full-Stack Developer with a strong passion for building dynamic, user-friendly, and high-performance web applications. My expertise spans from crafting engaging frontend interfaces to designing robust backend systems.
+                    </p>
+                    <p class="text-gray-400 leading-relaxed">
+                        My journey in development is driven by a desire to solve complex problems and create meaningful digital experiences. I thrive on continuous learning and adapting to new technologies to deliver innovative solutions that meet and exceed client expectations. I believe in writing clean, efficient, and scalable code that stands the test of time.
+                    </p>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 pt-6">
+                        <div class="glass-card p-6 rounded-xl transition duration-300 hover:shadow-2xl hover:shadow-cyan-500/10">
+                            <i class="fas fa-code text-2xl mb-3 text-accent-blue"></i>
+                            <h3 class="font-bold text-xl mb-1 text-white">CLEAN CODE</h3>
+                            <p class="text-gray-400 text-sm">Focus on maintainable, well-documented, and scalable codebase architecture.</p>
+                        </div>
+                        <div class="glass-card p-6 rounded-xl transition duration-300 hover:shadow-2xl hover:shadow-purple-500/10">
+                            <i class="fas fa-laptop-code text-2xl mb-3 text-neon-purple"></i>
+                            <h3 class="font-bold text-xl mb-1 text-white">RESPONSIVENESS</h3>
+                            <p class="text-gray-400 text-sm">Pixel-perfect design ensured across mobile, tablet, and desktop environments.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:w-1/2 flex justify-center items-center h-96 relative">
+                    <!-- Animated wave circles -->
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <!-- Expanding circles -->
+                        <div class="absolute w-64 h-64 rounded-full border border-blue-500/30 animate-ping" style="animation-duration: 3s;"></div>
+                        <div class="absolute w-48 h-48 rounded-full border border-purple-500/30 animate-ping" style="animation-duration: 2.5s; animation-delay: 0.5s;"></div>
+                        <div class="absolute w-32 h-32 rounded-full border border-cyan-500/30 animate-ping" style="animation-duration: 2s; animation-delay: 1s;"></div>
+                        
+                        <!-- Rotating particles -->
+                        <div class="absolute w-3 h-3 rounded-full bg-blue-500 animate-orbit" style="--orbit-size: 120px; --orbit-duration: 4s;"></div>
+                        <div class="absolute w-2 h-2 rounded-full bg-purple-500 animate-orbit" style="--orbit-size: 90px; --orbit-duration: 3s;"></div>
+                        <div class="absolute w-2.5 h-2.5 rounded-full bg-cyan-500 animate-orbit" style="--orbit-size: 150px; --orbit-duration: 5s;"></div>
+                        
+                        <!-- Central glowing core -->
+                        <div class="w-24 h-24 rounded-full bg-gradient-to-br from-blue-500/40 via-purple-500/40 to-pink-500/40 animate-pulse-glow"
+                             style="box-shadow: 0 0 60px rgba(59, 130, 246, 0.6), 0 0 90px rgba(138, 43, 226, 0.4);"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="skills" class="py-24 md:py-32 bg-mid-dark-bg scroll-hidden">
+        <div class="container mx-auto max-w-7xl px-6">
+            <h2 class="text-5xl md:text-6xl font-black uppercase text-center mb-4 tracking-wider text-white">
+                Skills & <span class="gradient-text">Expertise</span>
+            </h2>
+            <p class="text-center text-gray-400 mb-20 text-lg">
+                Combining technical excellence with creative vision
+            </p>
+
+            <div class="flex flex-col lg:flex-row gap-16 items-start">
+                
+                <div class="lg:w-2/5 flex justify-center relative w-full lg:w-auto">
+                    <div id="skill-diagram" class="skill-ring-container">
+                        <div id="skill-center-toggle" class="skill-center rounded-full flex items-center justify-center z-20">
+                            <i class="fas fa-bolt text-4xl text-white"></i>
+                        </div>
+                        
+                        <div id="skill-mobile" data-skill="Mobile" data-stack="stack-creative" class="skill-icon glass-card rounded-full flex items-center justify-center text-3xl">
+                            <i class="fas fa-paint-brush"></i>
+                            <span class="absolute -bottom-6 text-xs text-gray-400 font-semibold">Design</span>
+                        </div>
+                        <div id="skill-react" data-skill="Frontend" data-stack="stack-frontend" class="skill-icon glass-card rounded-full flex items-center justify-center text-3xl">
+                            <i class="fab fa-react"></i>
+                            <span class="absolute -bottom-6 text-xs text-gray-400 font-semibold">Frontend</span>
+                        </div>
+                        <div id="skill-uiux" data-skill="UI/UX" data-stack="stack-tools" class="skill-icon glass-card rounded-full flex items-center justify-center text-3xl">
+                            <i class="fas fa-toolbox"></i>
+                            <span class="absolute -bottom-6 text-xs text-gray-400 font-semibold">Tools</span>
+                        </div>
+                        <div id="skill-innovation" data-skill="Innovation" data-stack="stack-frontend" class="skill-icon glass-card rounded-full flex items-center justify-center text-3xl">
+                            <i class="fas fa-laptop-code"></i>
+                            <span class="absolute -bottom-6 text-xs text-gray-400 font-semibold">Web Dev</span>
+                        </div>
+                        <div id="skill-tools" data-skill="Tools" data-stack="stack-backend" class="skill-icon glass-card rounded-full flex items-center justify-center text-3xl">
+                            <i class="fas fa-database"></i>
+                            <span class="absolute -bottom-6 text-xs text-gray-400 font-semibold">Database</span>
+                        </div>
+                        <div id="skill-backend" data-skill="Backend" data-stack="stack-backend" class="skill-icon glass-card rounded-full flex items-center justify-center text-3xl">
+                            <i class="fas fa-server"></i>
+                            <span class="absolute -bottom-6 text-xs text-gray-400 font-semibold">Backend</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="skill-stacks-list" class="lg:w-3/5 space-y-6 w-full">
+                    
+                    <div id="stack-frontend" class="glass-card p-6 rounded-xl cursor-pointer transition-all duration-500 hover:scale-[1.02] hover:-translate-y-1 group"
+                         style="transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);"
+                         onmouseover="this.style.boxShadow='0 20px 60px rgba(59, 130, 246, 0.3)'"
+                         onmouseout="this.style.boxShadow=''">
+                        <div class="flex items-center gap-3 mb-2">
+                            <i class="fas fa-laptop-code text-2xl text-blue-400 group-hover:scale-110 transition-transform duration-300"></i>
+                            <h3 class="text-xl font-bold gradient-text">Frontend Excellence</h3>
+                        </div>
+                        <p class="text-gray-400 text-sm group-hover:text-gray-300 transition-colors duration-300">Modern JavaScript frameworks, responsive design, and pixel-perfect implementations</p>
+                        <div id="stack-content-frontend" class="tech-stack-container">
+                        </div>
+                    </div>
+                    
+                    <div id="stack-backend" class="glass-card p-6 rounded-xl cursor-pointer transition-all duration-500 hover:scale-[1.02] hover:-translate-y-1 group"
+                         style="transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);"
+                         onmouseover="this.style.boxShadow='0 20px 60px rgba(138, 43, 226, 0.3)'"
+                         onmouseout="this.style.boxShadow=''">
+                        <div class="flex items-center gap-3 mb-2">
+                            <i class="fas fa-server text-2xl text-purple-400 group-hover:scale-110 transition-transform duration-300"></i>
+                            <h3 class="text-xl font-bold gradient-text">Backend Development</h3>
+                        </div>
+                        <p class="text-gray-400 text-sm group-hover:text-gray-300 transition-colors duration-300">Designing robust APIs, managing databases, and building scalable server-side architecture.</p>
+                        <div id="stack-content-backend" class="tech-stack-container">
+                        </div>
+                    </div>
+                    
+                    <div id="stack-creative" class="glass-card p-6 rounded-xl cursor-pointer transition-all duration-500 hover:scale-[1.02] hover:-translate-y-1 group"
+                         style="transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);"
+                         onmouseover="this.style.boxShadow='0 20px 60px rgba(236, 72, 153, 0.3)'"
+                         onmouseout="this.style.boxShadow=''">
+                        <div class="flex items-center gap-3 mb-2">
+                            <i class="fas fa-palette text-2xl text-pink-400 group-hover:scale-110 transition-transform duration-300"></i>
+                            <h3 class="text-xl font-bold gradient-text">Creative Design</h3>
+                        </div>
+                        <p class="text-gray-400 text-sm group-hover:text-gray-300 transition-colors duration-300">User-centered design thinking with a focus on accessibility and visual appeal</p>
+                        <div id="stack-content-creative" class="tech-stack-container">
+                        </div>
+                    </div>
+
+                    <div id="stack-tools" class="glass-card p-6 rounded-xl cursor-pointer transition-all duration-500 hover:scale-[1.02] hover:-translate-y-1 group"
+                         style="transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);"
+                         onmouseover="this.style.boxShadow='0 20px 60px rgba(0, 191, 255, 0.3)'"
+                         onmouseout="this.style.boxShadow=''">
+                        <div class="flex items-center gap-3 mb-2">
+                            <i class="fas fa-tools text-2xl text-cyan-400 group-hover:scale-110 transition-transform duration-300"></i>
+                            <h3 class="text-xl font-bold gradient-text">Development Tools</h3>
+                        </div>
+                        <p class="text-gray-400 text-sm group-hover:text-gray-300 transition-colors duration-300">Essential tools for efficient development and version control</p>
+                        <div id="stack-content-tools" class="tech-stack-container">
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="portfolio" class="py-24 md:py-32 bg-transparent scroll-hidden">
+        <div class="container mx-auto max-w-7xl px-6">
+            <h2 class="text-5xl md:text-6xl font-black uppercase text-center mb-4 tracking-wider text-white">
+                VIEW MY <span class="gradient-text">WORKS</span>
+            </h2>
+            <p class="text-center text-gray-400 mb-20 text-lg">
+                My latest projects and case studies
+            </p>
+
+            <div class="flex justify-center mb-12">
+                <div id="portfolio-filters" class="glass-card p-2 rounded-full flex flex-wrap justify-center space-x-3 shadow-xl">
+                    <button data-filter="all" class="px-5 py-2 rounded-full text-sm font-semibold transition duration-300 bg-accent-blue text-white border-accent-blue hover:bg-blue-600">
+                        All Projects
+                    </button>
+                    <button data-filter="frontend" class="px-5 py-2 rounded-full text-sm font-semibold transition duration-300 bg-gray-800/50 text-gray-400 border-gray-700/50 hover:bg-gray-700/50">
+                        Frontend
+                    </button>
+                    <button data-filter="fullstack" class="px-5 py-2 rounded-full text-sm font-semibold transition duration-300 bg-gray-800/50 text-gray-400 border-gray-700/50 hover:bg-gray-700/50">
+                        Full-Stack
+                    </button>
+                    <button data-filter="creative" class="px-5 py-2 rounded-full text-sm font-semibold transition duration-300 bg-gray-800/50 text-gray-400 border-gray-700/50 hover:bg-gray-700/50">
+                        Creative UI/3D
+                    </button>
+                    <button data-filter="backend" class="px-5 py-2 rounded-full text-sm font-semibold transition duration-300 bg-gray-800/50 text-gray-400 border-gray-700/50 hover:bg-gray-700/50">
+                        Backend/API
+                    </button>
+                </div>
+            </div>
+
+            <div id="portfolio-grid" class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                </div>
+            
+
+            <!-- What I Love / Interests -->
+            <section id="interests" class="mt-16 py-20">
+                <div class="container mx-auto max-w-7xl px-6">
+                    <div class="mb-12 text-center">
+                        <h2 class="text-4xl md:text-5xl font-bold text-white mb-4">My <span class="gradient-text">Passions</span></h2>
+                        <p class="text-gray-300 text-lg max-w-2xl mx-auto">
+                            Innovating at the intersection of technology and creativity
+                        </p>
+                    </div>
+                    <div class="interests-grid">
+                        <div class="interest-card">
+                            <div class="interest-icon"><i class="fas fa-robot"></i></div>
+                            <h3>AI & Automation</h3>
+                            <p>Leveraging artificial intelligence and machine learning to build intelligent automation solutions. From chatbots to predictive analytics, I create systems that learn and adapt to deliver smarter experiences.</p>
+                            <a href="#portfolio" class="inline-flex items-center gap-2 text-purple-400 hover:text-purple-300 transition-colors duration-300 mt-auto">
+                                Explore AI <i class="fas fa-arrow-right text-sm"></i>
+                            </a>
+                        </div>
+                        <div class="interest-card">
+                            <div class="interest-icon"><i class="fas fa-cloud"></i></div>
+                            <h3>Cloud Computing</h3>
+                            <p>Building scalable cloud-native applications on AWS, Azure, and Google Cloud. Expert in serverless architecture, containerization, and designing resilient distributed systems that scale effortlessly.</p>
+                            <a href="#portfolio" class="inline-flex items-center gap-2 text-purple-400 hover:text-purple-300 transition-colors duration-300 mt-auto">
+                                Cloud Projects <i class="fas fa-arrow-right text-sm"></i>
+                            </a>
+                        </div>
+                        <div class="interest-card">
+                            <div class="interest-icon"><i class="fas fa-layer-group"></i></div>
+                            <h3>Full-Stack Development</h3>
+                            <p>Crafting end-to-end web applications with modern technologies. From responsive frontends with React to robust backends with Node.js and databases, I build complete solutions that users love.</p>
+                            <a href="#portfolio" class="inline-flex items-center gap-2 text-purple-400 hover:text-purple-300 transition-colors duration-300 mt-auto">
+                                View Projects <i class="fas fa-arrow-right text-sm"></i>
+                            </a>
+                        </div>
+                        <div class="interest-card">
+                            <div class="interest-icon"><i class="fas fa-mobile-alt"></i></div>
+                            <h3>Mobile Innovation</h3>
+                            <p>Creating cutting-edge mobile experiences with React Native and Flutter. Building cross-platform apps that deliver native performance with beautiful, intuitive interfaces that engage users.</p>
+                            <a href="#portfolio" class="inline-flex items-center gap-2 text-purple-400 hover:text-purple-300 transition-colors duration-300 mt-auto">
+                                Mobile Apps <i class="fas fa-arrow-right text-sm"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+        </div>
+    </section>
+    
+    <section id="contact" class="py-24 md:py-32 bg-mid-dark-bg scroll-hidden">
+        <div class="container mx-auto max-w-7xl px-6">
+            <h2 class="text-5xl md:text-6xl font-black uppercase text-center mb-4 tracking-wider text-white">
+                Let's Create <span class="gradient-text">Together</span>
+            </h2>
+            <p class="text-center text-gray-400 mb-20 text-lg">
+                Ready to bring your ideas to life? Let's start a conversation
+            </p>
+
+            <div class="flex flex-col lg:flex-row gap-12">
+                <div class="lg:w-1/3 p-8 glass-card rounded-xl">
+                    <h3 class="text-3xl font-bold mb-6 gradient-text">Get In Touch</h3>
+                    <p class="text-gray-400 mb-8 leading-relaxed">
+                        I'm always excited to work on new projects and collaborate with amazing people. Whether you have a specific project in mind or just want to explore possibilities, I'd love to hear from you.
+                    </p>
+
+                    <div class="space-y-4">
+                        <p class="text-sm font-semibold text-white">
+                            <i class="fas fa-map-marker-alt mr-3 text-red-500"></i> Based In:
+                            <span class="block text-gray-400 font-normal ml-6">San Francisco, CA (Open to Remote)</span>
+                        </p>
+                        <p class="text-sm font-semibold text-white">
+                            <i class="fas fa-hands-helping mr-3 text-green-500"></i> Available for:
+                            <span class="block text-gray-400 font-normal ml-6 space-y-1">
+                                <span>Freelance Projects</span>
+                                <span>Full-time Opportunities</span>
+                                <span>Consulting & Code Reviews</span>
+                            </span>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="lg:w-2/3 p-8 glass-card rounded-xl">
+                    <form id="contact-form" class="space-y-6">
+                        <input type="text" placeholder="Your Name" 
+                               class="w-full p-4 rounded-lg bg-gray-800/50 border border-gray-700/50 focus:border-neon-blue focus:ring-2 focus:ring-neon-blue/50 text-white placeholder-gray-500 transition-all duration-300 focus:bg-gray-800/70 focus:shadow-lg focus:shadow-blue-500/20 hover:border-gray-600" 
+                               style="outline: none;" required>
+                        
+                        <input type="email" placeholder="Your Email" 
+                               class="w-full p-4 rounded-lg bg-gray-800/50 border border-gray-700/50 focus:border-neon-blue focus:ring-2 focus:ring-neon-blue/50 text-white placeholder-gray-500 transition-all duration-300 focus:bg-gray-800/70 focus:shadow-lg focus:shadow-blue-500/20 hover:border-gray-600" 
+                               style="outline: none;" required>
+                        
+                        <select class="w-full p-4 rounded-lg bg-gray-800/50 border border-gray-700/50 focus:border-neon-blue focus:ring-2 focus:ring-neon-blue/50 text-white placeholder-gray-500 transition-all duration-300 focus:bg-gray-800/70 focus:shadow-lg focus:shadow-blue-500/20 hover:border-gray-600 cursor-pointer" 
+                                style="outline: none;">
+                            <option value="">Project Type</option>
+                            <option value="freelance">Freelance</option>
+                            <option value="fulltime">Full-time Inquiry</option>
+                            <option value="consulting">Consulting</option>
+                        </select>
+                        
+                        <textarea placeholder="Tell me about your project..." rows="4" 
+                                  class="w-full p-4 rounded-lg bg-gray-800/50 border border-gray-700/50 focus:border-neon-blue focus:ring-2 focus:ring-neon-blue/50 text-white placeholder-gray-500 transition-all duration-300 focus:bg-gray-800/70 focus:shadow-lg focus:shadow-blue-500/20 hover:border-gray-600 resize-none" 
+                                  style="outline: none;" required></textarea>
+                        
+                        <button type="submit" 
+                                class="w-full bg-gradient-to-r from-blue-500 via-blue-600 to-purple-600 text-white font-bold py-4 rounded-lg shadow-lg hover:shadow-2xl hover:shadow-blue-500/40 transition-all duration-500 transform hover:scale-[1.02] hover:-translate-y-1 relative overflow-hidden group"
+                                style="background-size: 200% 200%; animation: gradient-shift 3s ease infinite;">
+                            <span class="relative z-10">Send Message</span>
+                            <div class="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                        </button>
+                    </form>
+                    <div id="form-message" class="mt-4 text-center text-green-400 font-semibold hidden animate-pulse">
+                        <i class="fas fa-check-circle mr-2"></i>Message Sent Successfully! I'll be in touch soon.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="py-10 border-t border-gray-800 bg-dark-bg">
+        <div class="container mx-auto max-w-7xl px-6 text-center text-gray-500 text-sm">
+            <p>&copy; 2026 Mithan's Folio. All rights reserved.</p>
+            <div class="mt-4 space-x-4">
+                <a href="#" class="hover:text-white transition duration-300">Privacy Policy</a>
+                <span class="text-gray-700">|</span>
+                <a href="#" class="hover:text-white transition duration-300">Terms of Service</a>
+                <span class="text-gray-700">|</span>
+                <a href="#" class="hover:text-white transition duration-300">Careers</a>
+            </div>
+            <div class="mt-6 space-x-4 text-xl">
+                <a href="https://www.facebook.com/share/1DANjki2gL/" target="_blank" class="text-gray-500 hover:text-blue-600 transition-colors duration-300"><i class="fab fa-facebook"></i></a>
+                <a href="https://github.com/Mithanraj23" target="_blank" class="text-gray-500 hover:text-white transition-colors duration-300"><i class="fab fa-github"></i></a>
+                <a href="https://linkedin.com/in/mithanraj" target="_blank" class="text-gray-500 hover:text-blue-500 transition-colors duration-300"><i class="fab fa-linkedin"></i></a>
+                <a href="https://www.instagram.com/itz_mithan_23/" target="_blank" class="text-gray-500 hover:text-pink-500 transition-colors duration-300"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <button id="scrollToTopBtn" title="Go to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script>
+        // --- JAVASCRIPT FOR PARALLAX EFFECT ---
+
+        const bgLayer = document.getElementById('layer-bg');
+        const midLayer = document.getElementById('layer-mid');
+
+        const bgSpeed = parseFloat(bgLayer.getAttribute('data-speed')) || 0.1;
+        const midSpeed = parseFloat(midLayer.getAttribute('data-speed')) || 0.2;
+
+        let lastScrollY = window.scrollY;
+        let ticking = false;
+
+        function updateParallax(currentScrollY) {
+            const bgTranslateY = currentScrollY * bgSpeed;
+            const midTranslateY = currentScrollY * midSpeed;
+
+            bgLayer.style.transform = `translate3d(0, ${bgTranslateY}px, 0)`;
+            midLayer.style.transform = `translate3d(0, ${midTranslateY}px, 0)`;
+            
+            ticking = false;
+        }
+
+        // --- SCROLL ANIMATION & TOP BUTTON LOGIC ---
+        const sections = document.querySelectorAll('.scroll-hidden');
+        const scrollToTopBtn = document.getElementById('scrollToTopBtn');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        function checkScrollAnimations() {
+            let currentActiveSection = '';
+            sections.forEach(section => {
+                const rect = section.getBoundingClientRect();
+                const isVisible = (rect.top <= (window.innerHeight - rect.height * 0.2) && rect.bottom >= (rect.height * 0.2));
+
+                if (isVisible) {
+                    section.classList.add('scroll-visible');
+                    currentActiveSection = section.id;
+                    
+                    // Add fade-in animations to section content
+                    const sectionChildren = section.querySelectorAll('h2, h3, p, .glass-card, .interest-card');
+                    sectionChildren.forEach((child, index) => {
+                        setTimeout(() => {
+                            if (index % 2 === 0) {
+                                child.classList.add('animate-fade-in-left');
+                            } else {
+                                child.classList.add('animate-fade-in-right');
+                            }
+                        }, index * 100);
+                    });
+                } else {
+                    section.classList.remove('scroll-visible');
+                }
+            });
+
+            // Update active nav link
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (window.scrollY < 300) {
+                     if (link.getAttribute('href') === '#hero') {
+                        link.classList.add('active');
+                    }
+                    return;
+                }
+                if (link.getAttribute('href').substring(1) === currentActiveSection) {
+                    link.classList.add('active');
+                }
+            });
+            
+            // Show/Hide Scroll to Top Button
+            if (window.scrollY > 300) {
+                scrollToTopBtn.style.display = 'flex';
+            } else {
+                scrollToTopBtn.style.display = 'none';
+            }
+        }
+        
+        scrollToTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+        
+        function handleScroll() {
+            lastScrollY = window.scrollY;
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    updateParallax(lastScrollY);
+                    checkScrollAnimations(); 
+                });
+                ticking = true;
+            }
+        }
+
+        window.addEventListener('scroll', handleScroll);
+        window.addEventListener('resize', handleScroll);
+
+        // Enhanced header scroll effect
+        const mainHeader = document.getElementById('main-header');
+        let lastScroll = 0;
+        
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            
+            if (currentScroll > 100) {
+                mainHeader.style.backdropFilter = 'blur(20px)';
+                mainHeader.style.backgroundColor = 'rgba(17, 20, 37, 0.95)';
+                mainHeader.style.boxShadow = '0 10px 30px rgba(0, 0, 0, 0.5)';
+                mainHeader.style.borderBottom = '1px solid rgba(59, 130, 246, 0.2)';
+            } else {
+                mainHeader.style.backdropFilter = 'blur(12px)';
+                mainHeader.style.backgroundColor = 'rgba(17, 20, 37, 0.9)';
+                mainHeader.style.boxShadow = '0 4px 10px rgba(0, 0, 0, 0.2)';
+                mainHeader.style.borderBottom = '1px solid rgba(255, 255, 255, 0.1)';
+            }
+            
+            lastScroll = currentScroll;
+        });
+
+        // --- RADIAL SKILLS DIAGRAM & DYNAMIC STACK TOGGLE LOGIC (Overhauled) ---
+        
+        const skillCenterToggle = document.getElementById('skill-center-toggle');
+        const skillStacksList = document.getElementById('skill-stacks-list');
+        const skillIcons = document.querySelectorAll('.skill-icon');
+        let isExpanded = false;
+
+        // Skill Stack Data
+        const detailedTechStacks = {
+            "stack-content-frontend": [
+                { name: "HTML5", icon: "fab fa-html5", color: "text-orange-500" },
+                { name: "CSS3", icon: "fab fa-css3-alt", color: "text-blue-500" },
+                { name: "JavaScript", icon: "fab fa-js", color: "text-yellow-500" },
+                { name: "React", icon: "fab fa-react", color: "text-cyan-400" },
+                { name: "Tailwind", icon: "fas fa-wind", color: "text-sky-500" },
+                { name: "Bootstrap", icon: "fab fa-bootstrap", color: "text-purple-600" },
+                { name: "jQuery", icon: "fas fa-code", color: "text-blue-700" },
+            ],
+            // UPDATED: Backend Development Stack
+            "stack-content-backend": [
+                { name: "Java", icon: "fab fa-java", color: "text-red-600" },
+                { name: "Python", icon: "fab fa-python", color: "text-yellow-400" },
+                { name: "Node.js", icon: "fab fa-node-js", color: "text-green-500" },
+                { name: "SQL", icon: "fas fa-database", color: "text-gray-400" },
+                { name: "MongoDB", icon: "fas fa-leaf", color: "text-green-600" },
+                { name: "Express", icon: "fas fa-server", color: "text-gray-400" },
+            ],
+            "stack-content-creative": [
+                { name: "Figma", icon: "fab fa-figma", color: "text-pink-500" },
+                { name: "UI/UX", icon: "fas fa-drafting-compass", color: "text-yellow-600" },
+                { name: "Prototyping", icon: "fas fa-layer-group", color: "text-purple-400" },
+                { name: "Three.js", icon: "fas fa-cubes", color: "text-white" },
+            ],
+            "stack-content-tools": [
+                { name: "VS Code", icon: "fas fa-code", color: "text-blue-400" },
+                { name: "Git", icon: "fab fa-git-alt", color: "text-orange-600" },
+                { name: "GitHub", icon: "fab fa-github", color: "text-white" },
+                { name: "Vercel", icon: "fas fa-triangle", color: "text-white" }, 
+                { name: "IDLE (Python)", icon: "fab fa-python", color: "text-yellow-400" },
+                { name: "IntelliJ IDEA", icon: "fas fa-tools", color: "text-red-700" },
+            ]
+        };
+        
+        // Function to populate the dynamic stack content
+        function populateStacks() {
+            for (const id in detailedTechStacks) {
+                const container = document.getElementById(id);
+                if (container) {
+                    // Clear existing content to avoid duplication on re-run
+                    container.innerHTML = ''; 
+                    const innerContainer = document.createElement('div');
+                    innerContainer.className = 'flex flex-wrap justify-start gap-4 p-4 bg-gray-900/40 rounded-lg';
+                    detailedTechStacks[id].forEach(stack => {
+                        const isVercel = stack.name === "Vercel";
+                        const iconHtml = `
+                            <div class="tech-icon-item">
+                                <i class="${stack.icon} ${stack.color} text-3xl mb-1 ${isVercel ? 'fa-vercel' : ''}"></i>
+                                <span class="text-xs text-gray-400">${stack.name}</span>
+                            </div>
+                        `;
+                        innerContainer.insertAdjacentHTML('beforeend', iconHtml);
+                    });
+                    container.appendChild(innerContainer);
+                }
+            }
+        }
+        
+        // Initial positioning of skill icons in a perfect circle
+        function setRadialPositions() {
+            const container = document.getElementById('skill-diagram');
+            if (!container) return;
+            const radius = 155; // Distance from center
+            const center = 200; // Half of the skill-ring-container width/height (400/2)
+            const icons = [
+                'skill-mobile',
+                'skill-react',
+                'skill-uiux',
+                'skill-innovation',
+                'skill-tools',
+                'skill-backend'
+            ];
+            
+            const totalIcons = icons.length;
+            const angleStep = 360 / totalIcons; // Evenly distribute icons
+
+            icons.forEach((id, index) => {
+                const element = document.getElementById(id);
+                if (element) {
+                    const angle = angleStep * index - 90; // Start from top (-90 degrees)
+                    const angleRad = angle * (Math.PI / 180);
+                    const x = center + radius * Math.cos(angleRad) - 40; // Subtract half of icon width (80/2)
+                    const y = center + radius * Math.sin(angleRad) - 40; // Subtract half of icon height (80/2)
+                    element.style.left = `${x}px`;
+                    element.style.top = `${y}px`;
+                }
+            });
+        }
+        
+        // NEW: Toggle function for skill icons based on central click
+        function toggleSkillIcons() {
+            const isVisible = skillIcons[0].classList.contains('visible');
+            skillIcons.forEach(icon => {
+                if (isVisible) {
+                    icon.classList.remove('visible');
+                } else {
+                    icon.classList.add('visible');
+                }
+            });
+        }
+        
+        // Add click event to skill icons to open corresponding stack
+        skillIcons.forEach(icon => {
+            icon.addEventListener('click', (e) => {
+                const stackId = icon.getAttribute('data-stack');
+                if (stackId) {
+                    const shouldOpen = true;
+                    toggleSingleStack(stackId, shouldOpen);
+                    
+                    // Scroll to the stack card
+                    const stackCard = document.getElementById(stackId);
+                    if (stackCard) {
+                        stackCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                }
+            });
+        });
+        
+        // Toggle function for detailed stack visibility (from previous logic, kept for individual card click)
+        function toggleSingleStack(cardId, shouldOpen) {
+            const contentId = `stack-content-${cardId.split('-').pop()}`;
+            const contentContainer = document.getElementById(contentId);
+            const card = document.getElementById(cardId);
+            
+            // Close all others
+            skillStacksList.querySelectorAll('.tech-stack-container').forEach(c => c.classList.remove('expanded'));
+            skillStacksList.querySelectorAll('.glass-card').forEach(c => {
+                c.classList.remove('border-accent-blue', 'border-2');
+                c.style.transform = 'scale(1)';
+            });
+
+            if (contentContainer && card && shouldOpen) {
+                // Open the clicked one
+                contentContainer.classList.add('expanded');
+                card.classList.add('border-accent-blue', 'border-2');
+                card.style.transform = 'scale(1.02)';
+                isExpanded = true;
+            } else {
+                 isExpanded = false;
+            }
+        }
+
+
+        skillCenterToggle.addEventListener('click', toggleSkillIcons);
+        
+        // Add individual toggle capability
+        const stackCards = skillStacksList.querySelectorAll('.glass-card');
+        stackCards.forEach(card => {
+            card.addEventListener('click', (e) => {
+                const contentId = `stack-content-${card.id.split('-').pop()}`;
+                const contentContainer = document.getElementById(contentId);
+                
+                // If it's closed, open it; if it's open, close it.
+                const shouldOpen = !contentContainer.classList.contains('expanded');
+                toggleSingleStack(card.id, shouldOpen);
+            });
+        });
+
+        // --- DYNAMIC PORTFOLIO RENDERING LOGIC (UNCHANGED) ---
+        
+        const PROJECT_DATA = [
+            {
+                title: "QR Code Generator",
+                description: "A simple yet powerful QR code generator web application, built for efficiency and ease of use. Focus on speed and modern design.",
+                link: "https://qr-generator23.vercel.app/",
+                category: "frontend",
+                tags: ["React", "Tailwind CSS", "API"],
+                color: "cyan"
+            },
+            {
+                title: "Cypher Wallet (Mobile App)",
+                description: "A secure mobile banking application prototype built with React Native, featuring custom UI/UX design and biometrics integration.",
+              //  link: "projects/cypher-wallet.html",
+                category: "fullstack",
+                tags: ["React Native", "UI/UX", "Biometrics"],
+                color: "purple"
+            },
+            {
+                title: "DeepMind API Service",
+                description: "A robust backend service using Python/FastAPI for machine learning inference, deployed with Docker and Kubernetes.",
+             //   link: "projects/deepmind-api.html",
+                category: "backend",
+                tags: ["Python", "FastAPI", "Docker", "ML"],
+                color: "green"
+            },
+            {
+                title: "Retro Grid UI",
+                description: "A pure CSS/HTML static site showcasing an 80s cyberpunk aesthetic with custom animated background effects.",
+             //   link: "projects/retro-grid.html",
+                category: "creative",
+                tags: ["HTML", "CSS", "Animation"],
+                color: "red"
+            },
+            {
+                title: "Dynamic Blog Platform",
+                description: "A full-stack blog platform with user authentication, rich text editing, and dynamic content serving.",
+              //  link: "projects/blog-platform.html",
+                category: "fullstack",
+                tags: ["Node.js", "Express", "MongoDB"],
+                color: "blue"
+            },
+            {
+                title: "3D Portfolio Viewer",
+                description: "An experimental project using Three.js to render a 3D environment where projects can be interactively viewed.",
+             //   link: "projects/3d-portfolio.html",
+                category: "creative",
+                tags: ["Three.js", "JavaScript", "3D"],
+                color: "yellow"
+            }
+        ];
+
+        // Function to render projects based on a filter
+        function renderProjects(filter = 'all') {
+            const portfolioGrid = document.getElementById('portfolio-grid');
+            if (!portfolioGrid) return;
+            portfolioGrid.innerHTML = '';
+
+            const filteredProjects = filter === 'all'
+                ? PROJECT_DATA
+                : PROJECT_DATA.filter(p => p.category === filter);
+
+            filteredProjects.forEach(project => {
+                const tagsHtml = project.tags.map(tag => 
+                    `<span class="text-xs font-medium bg-gray-700/50 text-gray-300 px-3 py-1 rounded-full border border-gray-600">${tag}</span>`
+                ).join('');
+
+                const projectHtml = `
+                    <div class="glass-card p-6 rounded-xl transition-all duration-500 transform hover:scale-[1.03] hover:shadow-2xl hover:-translate-y-2 group cursor-pointer relative overflow-hidden"
+                         style="box-shadow: 0 4px 20px rgba(0,0,0,0.3); transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);"
+                         onmouseover="this.style.boxShadow='0 20px 60px rgba(59, 130, 246, 0.4), 0 0 40px rgba(138, 43, 226, 0.2)'"
+                         onmouseout="this.style.boxShadow='0 4px 20px rgba(0,0,0,0.3)'">
+                        
+                        <!-- Gradient overlay on hover -->
+                        <div class="absolute inset-0 bg-gradient-to-br from-blue-500/0 via-purple-500/0 to-pink-500/0 group-hover:from-blue-500/10 group-hover:via-purple-500/10 group-hover:to-pink-500/10 transition-all duration-500 rounded-xl"></div>
+                        
+                        <div class="h-48 bg-gray-900/50 rounded-lg flex items-center justify-center mb-4 border border-${project.color}-400/30 overflow-hidden relative group-hover:border-${project.color}-400/60 transition-all duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-br from-gray-900 via-${project.color}-900/50 to-${project.color}-800/30 opacity-80 group-hover:opacity-100 transition-opacity duration-500"></div>
+                            <div class="absolute inset-0 bg-gradient-to-t from-${project.color}-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                            <i class="fas fa-project-diagram text-5xl text-${project.color}-400/70 group-hover:text-${project.color}-300 z-10 transform group-hover:scale-110 group-hover:rotate-6 transition-all duration-500" 
+                               style="filter: drop-shadow(0 0 20px rgba(59, 130, 246, 0.6));"></i>
+                            <span class="absolute bottom-3 right-3 text-xs font-bold text-white/80 z-10 px-3 py-1 bg-${project.color}-500/30 rounded-full backdrop-blur-sm border border-${project.color}-400/40">${project.category.toUpperCase()}</span>
+                        </div>
+                        
+                        <div class="relative z-10">
+                            <h3 class="text-2xl font-bold gradient-text mb-2 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-blue-400 group-hover:via-purple-400 group-hover:to-pink-400 group-hover:bg-clip-text transition-all duration-500">${project.title}</h3>
+                            <p class="text-gray-400 text-sm mb-4 group-hover:text-gray-300 transition-colors duration-300">${project.description}</p>
+                            
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                ${tagsHtml}
+                            </div>
+
+                            <a href="${project.link}" target="_blank" class="inline-flex items-center gap-2 text-accent-blue hover:text-neon-blue text-sm font-semibold group/link transition-all duration-300">
+                                <span class="relative">
+                                    View ${project.category === 'creative' ? 'Live Demo' : 'Project'}
+                                    <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-400 to-purple-400 group-hover/link:w-full transition-all duration-300"></span>
+                                </span>
+                                <i class="fas fa-arrow-right transition-transform group-hover/link:translate-x-2 duration-300"></i>
+                            </a>
+                        </div>
+                    </div>
+                `;
+                portfolioGrid.insertAdjacentHTML('beforeend', projectHtml);
+            });
+
+            updateFilterButtons(filter);
+        }
+
+        function updateFilterButtons(activeFilter) {
+            const buttons = document.querySelectorAll('#portfolio-filters button');
+            buttons.forEach(button => {
+                button.classList.remove('bg-accent-blue', 'text-white', 'border-accent-blue', 'hover:bg-blue-600');
+                button.classList.add('bg-gray-800/50', 'text-gray-400', 'border-gray-700/50', 'hover:bg-gray-700/50');
+
+                if (button.getAttribute('data-filter') === activeFilter) {
+                    button.classList.remove('bg-gray-800/50', 'text-gray-400', 'border-gray-700/50');
+                    button.classList.add('bg-accent-blue', 'text-white', 'border-accent-blue', 'hover:bg-blue-600');
+                }
+            });
+        }
+        
+        // --- JAVASCRIPT FOR FORM SUBMISSION SIMULATION ---
+        const form = document.getElementById('contact-form');
+        const formMessage = document.getElementById('form-message');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            form.querySelector('button').textContent = 'Sending...';
+            form.querySelector('button').disabled = true;
+
+            setTimeout(() => {
+                form.reset();
+                formMessage.classList.remove('hidden');
+                form.querySelector('button').textContent = 'Send Message';
+                form.querySelector('button').disabled = false;
+                
+                setTimeout(() => {
+                    formMessage.classList.add('hidden');
+                }, 5000);
+            }, 1500);
+        });
+        
+        // On load
+        document.addEventListener('DOMContentLoaded', () => {
+            updateParallax(window.scrollY);
+            checkScrollAnimations();
+            setRadialPositions();
+            populateStacks();
+            
+            // Create background particles
+            createBackgroundParticles();
+            
+            // Initialize portfolio rendering and attach filter listeners
+            renderProjects('all'); 
+            document.getElementById('portfolio-filters')?.addEventListener('click', (e) => {
+                const target = e.target.closest('button');
+                if (target && target.hasAttribute('data-filter')) {
+                    renderProjects(target.getAttribute('data-filter'));
+                }
+            });
+        });
+
+        // Create animated background particles
+        function createBackgroundParticles() {
+            const colors = [
+                'rgba(59, 130, 246, 0.3)',
+                'rgba(138, 43, 226, 0.3)',
+                'rgba(0, 191, 255, 0.3)',
+                'rgba(236, 72, 153, 0.3)'
+            ];
+            
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                const size = Math.random() * 4 + 2;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.top = `${Math.random() * 100}%`;
+                particle.style.animation = `particleFloat ${Math.random() * 10 + 10}s infinite ease-in-out`;
+                particle.style.animationDelay = `${Math.random() * 5}s`;
+                
+                document.body.appendChild(particle);
+            }
+        }
+
+    </script>
+</body>
+</html>
